@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modootest.dev/schemas/v1/selection.json",
+  "title": "modootest Impacted Test Selection",
+  "description": "Selected impacted tests and excluded targets based on change intelligence plan.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "mode",
+    "is_complete",
+    "broadened_to_all_tests",
+    "explanation",
+    "selected_tests",
+    "excluded_targets",
+    "test_paths",
+    "diagnostics",
+    "plan"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://modootest.dev/schemas/v1/selection.json"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["direct", "dependent", "safe"]
+    },
+    "is_complete": {
+      "type": "boolean"
+    },
+    "broadened_to_all_tests": {
+      "type": "boolean"
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "selected_tests": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/selected_test" }
+    },
+    "excluded_targets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/excluded_target" }
+    },
+    "test_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "diagnostic.json" }
+    },
+    "plan": {
+      "$ref": "plan.json"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "selected_test": {
+      "type": "object",
+      "required": ["path", "addon", "reason"],
+      "properties": {
+        "path": { "type": "string" },
+        "addon": { "type": ["string", "null"] },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "excluded_target": {
+      "type": "object",
+      "required": ["addon", "reason"],
+      "properties": {
+        "addon": { "type": "string" },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

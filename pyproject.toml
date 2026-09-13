@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "modootest"
+version = "1.0.0"
+description = "Modern Odoo Test framework (modootest)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MPL-2.0"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Jeevanism", email = "jeevanism@gmail.com" },
+]
+keywords = ["odoo", "pytest", "testing", "tdd", "test-framework"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "pytest>=8.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jeevanism/modootest"
+Repository = "https://github.com/jeevanism/modootest"
+Issues = "https://github.com/jeevanism/modootest/issues"
+
+[project.optional-dependencies]
+agent = ["jsonschema>=4.20.0"]
+
+[project.scripts]
+modootest = "modootest.cli.main:main"
+
+[project.entry-points."pytest11"]
+modootest = "modootest.pytest_plugin.plugin"
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"modootest.schemas.v1" = ["*.json"]

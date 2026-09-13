@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modootest.dev/schemas/v1/result.json",
+  "title": "modootest CLI One-Shot Result Envelope",
+  "description": "Standardized envelope for one-shot command execution containing metadata, diagnostics, payload, and execution result.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "contract_version",
+    "command",
+    "status",
+    "exit_code",
+    "is_complete",
+    "diagnostics",
+    "payload",
+    "execution"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://modootest.dev/schemas/v1/result.json"
+    },
+    "contract_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "command": {
+      "type": "string",
+      "enum": ["plan", "impacted", "test", "watch", "modootest"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["complete", "incomplete", "error"]
+    },
+    "exit_code": {
+      "type": "integer",
+      "enum": [0, 1, 2, 3]
+    },
+    "is_complete": {
+      "type": "boolean"
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "diagnostic.json" }
+    },
+    "payload": {
+      "oneOf": [
+        { "$ref": "plan.json" },
+        { "$ref": "selection.json" },
+        { "type": "null" }
+      ]
+    },
+    "execution": {
+      "oneOf": [
+        { "$ref": "execution.json" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

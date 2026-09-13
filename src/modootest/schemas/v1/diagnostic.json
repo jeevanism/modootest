@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modootest.dev/schemas/v1/diagnostic.json",
+  "title": "modootest Diagnostic",
+  "description": "Structured diagnostic message with severity, machine code, category, and remediation.",
+  "type": "object",
+  "required": [
+    "severity",
+    "code",
+    "category",
+    "message"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://modootest.dev/schemas/v1/diagnostic.json"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["INFO", "WARNING", "ERROR"]
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "category": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "message": {
+      "type": "string"
+    },
+    "remediation": {
+      "type": ["string", "null"]
+    },
+    "context": {
+      "type": ["object", "null"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modootest.dev/schemas/v1/plan.json",
+  "title": "modootest Change Intelligence Plan",
+  "description": "Deterministic change intelligence plan analyzing Git changes and addon impacts.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "git_root",
+    "comparison_mode",
+    "base_commit",
+    "head_commit",
+    "addons_paths",
+    "is_complete",
+    "fresh_process_required",
+    "module_update_targets",
+    "changed_addons",
+    "deleted_addons",
+    "downstream_impact_addons",
+    "file_classifications",
+    "diagnostics",
+    "graph_snapshot_policy"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://modootest.dev/schemas/v1/plan.json"
+    },
+    "git_root": {
+      "type": "string"
+    },
+    "comparison_mode": {
+      "type": "string",
+      "enum": ["commit", "working-tree"]
+    },
+    "base_commit": {
+      "type": "string"
+    },
+    "head_commit": {
+      "type": ["string", "null"]
+    },
+    "addons_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "is_complete": {
+      "type": "boolean"
+    },
+    "fresh_process_required": {
+      "type": "boolean"
+    },
+    "module_update_targets": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "changed_addons": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "deleted_addons": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "downstream_impact_addons": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "file_classifications": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/file_classification" }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "diagnostic.json" }
+    },
+    "graph_snapshot_policy": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "file_classification": {
+      "type": "object",
+      "required": [
+        "path",
+        "old_path",
+        "status",
+        "category",
+        "reason",
+        "is_uncertain",
+        "module_update",
+        "fresh_process",
+        "old_owner",
+        "new_owner",
+        "affected_addons"
+      ],
+      "properties": {
+        "path": { "type": "string" },
+        "old_path": { "type": ["string", "null"] },
+        "status": { "type": "string" },
+        "category": { "type": "string" },
+        "reason": { "type": "string" },
+        "is_uncertain": { "type": "boolean" },
+        "module_update": { "type": ["boolean", "null"] },
+        "fresh_process": { "type": "boolean" },
+        "old_owner": { "type": ["string", "null"] },
+        "new_owner": { "type": ["string", "null"] },
+        "affected_addons": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

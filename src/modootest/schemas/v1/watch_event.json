@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modootest.dev/schemas/v1/watch_event.json",
+  "title": "modootest Watch Streaming Event",
+  "description": "Newline-delimited event document emitted during modootest watch supervision.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "contract_version",
+    "sequence",
+    "event",
+    "data"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://modootest.dev/schemas/v1/watch_event.json"
+    },
+    "contract_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "watch_started",
+        "change_detected",
+        "run_started",
+        "run_completed",
+        "planning_error",
+        "watch_stopped"
+      ]
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "event": { "const": "watch_started" } } },
+      "then": { "properties": { "data": { "$ref": "#/$defs/watch_started" } } }
+    },
+    {
+      "if": { "properties": { "event": { "const": "change_detected" } } },
+      "then": { "properties": { "data": { "$ref": "#/$defs/change_detected" } } }
+    },
+    {
+      "if": { "properties": { "event": { "const": "run_started" } } },
+      "then": { "properties": { "data": { "$ref": "#/$defs/run_started" } } }
+    },
+    {
+      "if": { "properties": { "event": { "const": "run_completed" } } },
+      "then": { "properties": { "data": { "$ref": "#/$defs/run_completed" } } }
+    },
+    {
+      "if": { "properties": { "event": { "const": "planning_error" } } },
+      "then": { "properties": { "data": { "$ref": "#/$defs/planning_error" } } }
+    },
+    {
+      "if": { "properties": { "event": { "const": "watch_stopped" } } },
+      "then": { "properties": { "data": { "$ref": "#/$defs/watch_stopped" } } }
+    }
+  ],
+  "$defs": {
+    "watch_started": {
+      "type": "object",
+      "required": ["addons_paths", "debounce", "mode", "poll_interval", "repo", "timeout"],
+      "properties": {
+        "addons_paths": { "type": "array", "items": { "type": "string" } },
+        "debounce": { "type": "number", "exclusiveMinimum": 0 },
+        "mode": { "type": "string", "enum": ["direct", "dependent", "safe"] },
+        "poll_interval": { "type": "number", "exclusiveMinimum": 0 },
+        "repo": { "type": "string" },
+        "timeout": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "change_detected": {
+      "type": "object",
+      "required": ["changed_files"],
+      "properties": {
+        "changed_files": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "run_started": {
+      "type": "object",
+      "required": ["collect_only", "mode", "test_count", "test_paths"],
+      "properties": {
+        "collect_only": { "type": "boolean" },
+        "mode": { "type": "string", "enum": ["direct", "dependent", "safe"] },
+        "test_count": { "type": "integer", "minimum": 0 },
+        "test_paths": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "run_completed": {
+      "type": "object",
+      "required": ["collect_only", "executed", "returncode", "status", "summary", "test_count"],
+      "properties": {
+        "collect_only": { "type": "boolean" },
+        "executed": { "type": "boolean" },
+        "log_file": { "type": ["string", "null"] },
+        "returncode": { "type": ["integer", "null"] },
+        "status": {
+          "type": "string",
+          "enum": [
+            "no_tests_selected", "collection_passed", "execution_passed", "tests_failed",
+            "interrupted", "pytest_internal_error", "pytest_usage_error", "no_tests_collected",
+            "timeout", "launch_error", "cancelled", "unknown_subprocess_failure"
+          ]
+        },
+        "summary": { "type": ["string", "null"] },
+        "test_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "planning_error": {
+      "type": "object",
+      "required": ["error"],
+      "properties": { "error": { "type": "string" } },
+      "additionalProperties": false
+    },
+    "watch_stopped": {
+      "type": "object",
+      "maxProperties": 0
+    }
+  }
+}
