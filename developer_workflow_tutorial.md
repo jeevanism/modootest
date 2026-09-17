@@ -37,40 +37,43 @@ Before writing code, state the requirement as an observable outcome. For example
 
 ## 2. Install modootest in the Odoo environment
 
-Install modootest into the same Python environment that imports Odoo and runs
+Install `modootest` into the same Python environment that imports Odoo and runs
 pytest. Do not install it into an unrelated global interpreter.
 
-### Current pre-PyPI installation
+### Install from PyPI
 
-The package has not yet been published to PyPI. Install the current development
-version from Git:
-
-```bash
-uv pip install --python /path/to/odoo-venv/bin/python \
-  "git+https://github.com/jeevanism/modest.git@main"
-```
-
-Or install a local checkout in editable mode while developing modootest itself:
+`modootest` is available on [PyPI](https://pypi.org/project/modootest/). Install it with `pip`:
 
 ```bash
-uv pip install --python /path/to/odoo-venv/bin/python \
-  -e /path/to/odoo-modest-framework
+/path/to/odoo-venv/bin/python -m pip install modootest
 ```
 
-The equivalent local pip command is:
+Or pin a specific version:
 
 ```bash
-/path/to/odoo-venv/bin/python -m pip install \
-  -e /path/to/odoo-modest-framework
+/path/to/odoo-venv/bin/python -m pip install modootest==1.0.0
 ```
 
-After the package is published, the intended commands will be:
+If you use `uv`:
 
 ```bash
 uv pip install --python /path/to/odoo-venv/bin/python modootest
+```
 
-# Or:
-/path/to/odoo-venv/bin/python -m pip install modootest
+### Optional: Development installation from source
+
+If you are developing or contributing to `modootest` itself, install a local checkout in editable mode:
+
+```bash
+/path/to/odoo-venv/bin/python -m pip install \
+  -e /path/to/odoo-modootest-2026
+```
+
+Or with `uv`:
+
+```bash
+uv pip install --python /path/to/odoo-venv/bin/python \
+  -e /path/to/odoo-modootest-2026
 ```
 
 ### Verify the installation
@@ -87,7 +90,7 @@ Run all three checks with the Odoo environment's interpreter:
   grep -- --modootest-config
 ```
 
-The first command must show the expected version and installation path. The
+The first command must show the expected version (`1.0.0` or later) and installation path. The
 second must display the `modootest` CLI, and the third must find the pytest
 configuration option. Fix the environment before continuing if any check fails.
 
