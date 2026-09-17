@@ -3,46 +3,56 @@
 **modootest (Modern Odoo Test Framework)** is a pytest framework designed for
 Odoo 19 custom development. It gives Odoo developers isolated transactions,
 Odoo fixtures, user and company contexts, query-budget checks, HTTP mocking,
-frozen time, and tools for planning and running only the tests affected by a
-code change.
+frozen time, and tools for planning changes and selecting tests from affected
+addons and their dependencies.
 
 ## Why use modootest?
 
 Custom Odoo development combines Python models, ORM behavior, permissions,
 record rules, and multiple companies. `modootest` makes these backend
-requirements easier to test in a repeatable RED → GREEN workflow and rolls back
-each test's database changes.
+requirements easier to test in a repeatable RED → GREEN workflow.
 
-This improves productivity compared with traditional Odoo test workflows that
-can require sharing a database, restarting the Odoo server, or upgrading a
-module between changes. `modootest` is designed for model methods, computed
-fields, constraints, workflows, permissions, multi-company rules, and backend
-integrations. It does not replace browser, JavaScript, or visual UI tests.
+- **Less repeated manual setup:** fixtures create records and user/company
+  contexts, while managed transactions roll back test changes afterward.
+- **Focused feedback on business logic:** each ordinary test run loads current
+  Python code in a fresh process. With a separate test database, your development
+  web server can keep running while you test Python-method changes.
+- **Repeatable regression checks:** verify permissions, calculations, workflows,
+  and ORM behavior with assertions instead of repeating browser interactions.
+- **Guidance on what to test and update:** AST-based change analysis recommends
+  lifecycle actions; impacted-test selection works at addon/test-file level and
+  can include downstream dependencies. Safe mode broadens selection when the
+  analysis is uncertain.
+
+Modootest complements Odoo's module lifecycle. Python-only method edits normally
+need no addon upgrade, but database-backed changes still do. It does not reload
+the browser server or replace frontend testing.
 
 ## Installation
 
-PyPI publication is pending. Until the first release is available, install the
-current source into the same Python environment that imports Odoo and runs
-pytest:
-
-```bash
-/path/to/odoo-venv/bin/python -m pip install \
-  "git+https://github.com/jeevanism/modootest.git@main"
-```
-
-After publication, the intended command is:
+Available on [PyPI](https://pypi.org/project/modootest/), including
+[version 1.0.0](https://pypi.org/project/modootest/1.0.0/). Install into the same
+Python environment that imports Odoo:
 
 ```bash
 /path/to/odoo-venv/bin/python -m pip install modootest
 ```
 
-`modootest` supports Odoo 19 with Python 3.10 through 3.13. Odoo itself is not
-installed as a dependency; use your existing Odoo environment.
+Or use `uv`:
+
+```bash
+uv pip install --python /path/to/odoo-venv/bin/python modootest
+```
+
+The package targets Odoo 19 and declares Python 3.10 through 3.13 compatibility,
+including Python 3.12. Odoo itself is not installed as a dependency; use your
+existing Odoo environment.
 
 ## Developer documentation
 
-For installation details, dedicated test-database setup, fixtures, writing your
-first test, and focused test execution, see the [developer workflow documentation](https://github.com/jeevanism/modootest/blob/main/developer_workflow_tutorial.md).
+For environment setup, database choices and tradeoffs, addon installation, and
+a complete sales-discount RED → GREEN example, see the
+[developer workflow documentation](developer_workflow_tutorial.md).
 
 ## License
 
@@ -62,17 +72,6 @@ modootest is distributed under the [Mozilla Public License 2.0](https://www.mozi
 | `mock_http` | Mock outbound HTTP requests and assert request details. |
 | `freeze_time` | Freeze Python and Odoo date/time helpers within a block. |
 
-## Typical workflow
-
-1. Create or select a dedicated Odoo test database and install the addon under test.
-2. Write one focused pytest function describing the required backend behavior.
-3. Run the test and confirm the intentional RED result.
-4. Implement the addon change and rerun for GREEN.
-5. Use `modootest plan` and `modootest impacted` to understand and select tests affected by later changes.
-
-Each test runs sequentially with transaction cleanup. Do not share the database
-with another test process or use `pytest-xdist` workers against the same database.
-
 ## Scope and boundaries
 
 `modootest` is intended for model methods, computed fields, constraints,
@@ -85,5 +84,6 @@ responsibility of the normal Odoo setup process. Direct database connections,
 independent cursors, commits outside the managed cursor, and external side
 effects bypass the isolation guarantees; use the supplied fixtures and mocks.
 
-For complete configuration examples, troubleshooting, agent JSON output, and
-the full RED → GREEN tutorial, see the [developer workflow documentation](https://github.com/jeevanism/modootest/blob/main/developer_workflow_tutorial.md).
+Tests run sequentially. Use disposable data and avoid concurrent server/test
+access to the test database. A separate test database is recommended for smooth
+development; the tutorial explains the optional shared-database setup.
