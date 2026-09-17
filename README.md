@@ -21,11 +21,19 @@ integrations. It does not replace browser, JavaScript, or visual UI tests.
 
 ## Installation
 
-Install it into the same Python environment that imports Odoo and runs pytest:
+PyPI publication is pending. Until the first release is available, install the
+current source into the same Python environment that imports Odoo and runs
+pytest:
 
 ```bash
 /path/to/odoo-venv/bin/python -m pip install \
-  "git+https://github.com/jeevanism/modootest.git@v1.0.1"
+  "git+https://github.com/jeevanism/modootest.git@main"
+```
+
+After publication, the intended command is:
+
+```bash
+/path/to/odoo-venv/bin/python -m pip install modootest
 ```
 
 `modootest` supports Odoo 19 with Python 3.10 through 3.13. Odoo itself is not

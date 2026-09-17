@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "modootest"
 version = "1.0.0"
 description = "Modern Odoo Test framework (modootest)"
-readme = "README.md"
-requires-python = ">=3.11"
+readme = "PYPI_README.md"
+requires-python = ">=3.10,<3.14"
 license = "MPL-2.0"
 license-files = ["LICENSE"]
 authors = [
@@ -18,11 +18,12 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Pytest",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Testing",
 ]
 dependencies = [
